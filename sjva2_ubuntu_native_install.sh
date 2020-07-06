@@ -1,4 +1,4 @@
-# made by jassmusic @20.06.22
+# made by jassmusic @20.07.06
 
 echo "-- SJVA2 Install for Ubuntu Linux Native"
 echo "   from nVidia Shield Cafe --"
@@ -159,7 +159,8 @@ do
 done 
 
 if [ "${RUN_FILEBROWSER}" == "true" ]; then
-    ps -eo pid,args | grep filebrowser | grep -v grep | awk '{print $1}' | xargs -r kill -9
+    #ps -eo pid,args | grep filebrowser | grep -v grep | awk '{print $1}' | xargs -r kill -9
+    pgrep -a filebrowser | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
 fi
 EOM
 chmod 777 my_start.sh
@@ -184,7 +185,7 @@ sjva2_running=`pgrep -a my_start | awk '{ print $1 }'`
 python_running=`pgrep -a python | grep sjva.py | awk '{ print $1 }'`
 celery_running=`pgrep -a python | grep celery | awk '{ print $1 }'`
 redis_running=`pgrep -a redis-server | awk '{ print $1 }'`
-#filebrowser_running=`pgrep -a filebrowser | awk '{ print $1 }'`
+filebrowser_running=`pgrep -a filebrowser | awk '{ print $1 }'`
 case "$1" in
 start)
 if [ -z "$sjva2_running" ] || [ -z "$python_running" ]; then
@@ -201,22 +202,22 @@ fi
 stop)
 if [ -z "$sjva2_running" ] || [ -z "$python_running" ] ; then
 echo -n "Checking sjva2: "
-"sjva2_running" | xargs kill -9 >/dev/null 2>&1
-"python_running" | xargs kill -9 >/dev/null 2>&1
-"celery_running" | xargs kill -9 >/dev/null 2>&1
-"redis_running" | xargs kill -9 >/dev/null 2>&1
-#"filebrowser_running" | xargs kill -9 >/dev/null 2>&1
+pgrep -a my_start | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
+pgrep -a python | grep sjva.py | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
+pgrep -a python | grep celery | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
+pgrep -a redis-server | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
+pgrep -a filebrowser | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
 sleep 1
 echo "done"
 echo "sjva2 is not running (no process found)..."
 exit 0
 fi
 echo -n "Killing sjva2: "
-"sjva2_running" | xargs kill -9 >/dev/null 2>&1
-"python_running" | xargs kill -9 >/dev/null 2>&1
-"celery_running" | xargs kill -9 >/dev/null 2>&1
-"redis_running" | xargs kill -9 >/dev/null 2>&1
-#"filebrowser_running" | xargs kill -9 >/dev/null 2>&1
+pgrep -a my_start | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
+pgrep -a python | grep sjva.py | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
+pgrep -a python | grep celery | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
+pgrep -a redis-server | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
+pgrep -a filebrowser | awk '{ print $1 }' | xargs kill -9 >/dev/null 2>&1
 sleep 1
 echo "done"
 ;;
